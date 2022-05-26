@@ -7,44 +7,38 @@ services:
       MYSQL_DATABASE: myschema
       MYSQL_ROOT_PASSWORD: password
     ports:
-    - "3307:3306"
+      - "3307:3306"
 
   rabbitmq:
     image: "rabbitmq:3-management"
     ports:
       - "5672:5672"
-      - "15672:15672"
+      - "127.0.0.1:15672:15672"
 
   api:
     build: ./api/
     ports:
       - "8080:8080"
-    environment:
-      MYSQL_HOST: "db"
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
-      MYSQL_PORT: 3306
-      rabbitmq_host: "localhost"
-      rabbitmq_username: guest
-      rabbitmq_password: guest
     depends_on:
       - db
       - rabbitmq
     restart: always
 
+
   frontend:
     build: ./frontend/
     ports:
-    - "8081:8080"
+      - "8081:8081"
+    environment:
+      api_base_url: "http://api:8080/"
     depends_on:
       - api
 
-  rabbitworker:
+
+  receipt-service:
     build: ./receipt-service/
-    ports:
-      - "8082:8080"
     environment:
-      rabbit_host: "localhost"
+      rabbitmq_host: "rabbitmq"
     depends_on:
       - rabbitmq
     restart: always

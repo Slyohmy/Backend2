@@ -1,6 +1,7 @@
 package com.example.frontend.Service;
 
 import com.example.frontend.Models.Produkt;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class RestService {
 
-    //@Value("${api_base_url:http://localhost:8080/}")
-    //private String apiBaseUrl;
+    @Value("${api_base_url:http://localhost:8080/}")
+    private String apiBaseUrl;
 
     private final RestTemplate restTemplate;
 
@@ -22,8 +23,7 @@ public class RestService {
     }
 
     public Produkt[] getProducts(){
-        String url = "http://localhost:8080/produkt";
-        return restTemplate.getForObject(url, Produkt[].class);
+        return restTemplate.getForObject(apiBaseUrl + "produkt", Produkt[].class);
     }
 
     @RequestMapping("/produkt")
