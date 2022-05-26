@@ -7,7 +7,7 @@ services:
       MYSQL_DATABASE: myschema
       MYSQL_ROOT_PASSWORD: password
     ports:
-      - "3307:3306"
+      - "127.0.0.1:3307:3306"
 
   rabbitmq:
     image: "rabbitmq:3-management"
@@ -41,4 +41,5 @@ services:
       rabbitmq_host: "rabbitmq"
     depends_on:
       - rabbitmq
+      - api
     restart: always
